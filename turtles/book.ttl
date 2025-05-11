@@ -1,0 +1,284 @@
+@prefix kb:  <http://example.org/kegan#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+######################################################################
+#  CORE STRUCTURE
+######################################################################
+
+### Classes
+kb:Person                       a owl:Class .
+kb:Adolescent                   a owl:Class ; rdfs:subClassOf kb:Person .
+kb:Parent                       a owl:Class ; rdfs:subClassOf kb:Person .
+kb:Child                        a owl:Class ; rdfs:subClassOf kb:Person .
+kb:IntimatePartner              a owl:Class ; rdfs:subClassOf kb:Person .
+kb:Leader                       a owl:Class ; rdfs:subClassOf kb:Person .
+kb:Therapist                    a owl:Class ; rdfs:subClassOf kb:Person .
+kb:Student                      a owl:Class ; rdfs:subClassOf kb:Person .
+kb:Teacher                      a owl:Class ; rdfs:subClassOf kb:Person .
+
+kb:OrderOfConsciousness         a owl:Class .
+kb:Expectation                  a owl:Class .
+
+kb:HoldingEnvironment           a owl:Class .
+kb:BridgingEnvironment          a owl:Class ; rdfs:subClassOf kb:HoldingEnvironment .
+kb:CommunityOfIdeology          a owl:Class ; rdfs:subClassOf kb:HoldingEnvironment .
+
+kb:Relationship                 a owl:Class .
+kb:PublicRelationship           a owl:Class ; rdfs:subClassOf kb:Relationship .
+kb:PrivateRelationship          a owl:Class ; rdfs:subClassOf kb:Relationship .
+
+kb:VoiceOrientation             a owl:Class .
+kb:PersonalityPreference        a owl:Class .
+
+kb:SelfExpansionActivity        a owl:Class .
+kb:Therapy                      a kb:SelfExpansionActivity .
+kb:ClassroomLearning            a kb:SelfExpansionActivity .
+
+kb:Curriculum                   a owl:Class .
+kb:RegularCurriculum            a owl:Class ; rdfs:subClassOf kb:Curriculum .
+kb:HonorsCurriculum             a owl:Class ; rdfs:subClassOf kb:Curriculum .
+
+### Orders-of-mind individuals
+kb:IndependentElements          a kb:OrderOfConsciousness .
+kb:DurableCategories            a kb:OrderOfConsciousness .
+kb:CrossCategorical             a kb:OrderOfConsciousness .
+kb:Systemic                     a kb:OrderOfConsciousness .
+kb:TransSystemic                a kb:OrderOfConsciousness .
+
+### Voice variants (orthogonal)
+kb:RelationalVoice              a kb:VoiceOrientation .
+kb:SeparateVoice                a kb:VoiceOrientation .
+
+### MBTI preference individuals
+kb:IntrovertPreference, kb:ExtrovertPreference,
+kb:SensorPreference,    kb:IntuitivePreference,
+kb:ThinkerPreference,   kb:FeelerPreference,
+kb:JudgerPreference,    kb:PerceiverPreference
+                             a kb:PersonalityPreference .
+
+### Curriculum instances
+kb:ModernistCurriculum          a kb:RegularCurriculum ;
+                                kb:demandsOrder kb:Systemic .
+kb:PostmodernCurriculum         a kb:HonorsCurriculum ;
+                                kb:demandsOrder kb:TransSystemic .
+
+######################################################################
+#  PROPERTIES
+######################################################################
+
+kb:subordinates            a owl:ObjectProperty ;
+                           rdfs:domain kb:OrderOfConsciousness ;
+                           rdfs:range  kb:OrderOfConsciousness .
+
+kb:requiresOrder           a owl:ObjectProperty ;
+                           rdfs:domain kb:Expectation ;
+                           rdfs:range  kb:OrderOfConsciousness .
+
+kb:expects                 a owl:ObjectProperty ;
+                           rdfs:domain kb:Person ;
+                           rdfs:range  kb:Expectation .
+
+kb:operatesAtOrder         a owl:ObjectProperty ;
+                           rdfs:domain kb:Person ;
+                           rdfs:range  kb:OrderOfConsciousness .
+
+kb:supportsTransitionTo    a owl:ObjectProperty ;
+                           rdfs:domain kb:HoldingEnvironment ;
+                           rdfs:range  kb:OrderOfConsciousness .
+
+kb:offersSupport, kb:offersChallenge
+                           a owl:DatatypeProperty ;
+                           rdfs:domain kb:HoldingEnvironment ;
+                           rdfs:range  xsd:boolean .
+
+kb:partnersWith            a owl:ObjectProperty , owl:SymmetricProperty ;
+                           rdfs:domain kb:Person ;
+                           rdfs:range  kb:Person .
+
+kb:hasVoiceOrientation     a owl:ObjectProperty ;
+                           rdfs:domain kb:Person ;
+                           rdfs:range  kb:VoiceOrientation .
+
+kb:orthogonalTo            a owl:ObjectProperty ;
+                           rdfs:domain kb:VoiceOrientation ;
+                           rdfs:range  kb:OrderOfConsciousness .
+
+kb:hasPreference           a owl:ObjectProperty ;
+                           rdfs:domain kb:Person ;
+                           rdfs:range  kb:PersonalityPreference .
+
+kb:participatesIn          a owl:ObjectProperty ;
+                           rdfs:domain kb:Person ;
+                           rdfs:range  kb:SelfExpansionActivity .
+
+kb:treatedBy               a owl:ObjectProperty ;
+                           rdfs:domain kb:Person ;
+                           rdfs:range  kb:Therapist .
+
+kb:mentoredBy              a owl:ObjectProperty ;
+                           rdfs:domain kb:Person ;
+                           rdfs:range  kb:Teacher .
+
+kb:demandsOrder            a owl:ObjectProperty ;
+                           rdfs:domain kb:Curriculum ;
+                           rdfs:range  kb:OrderOfConsciousness .
+
+######################################################################
+#  ORDER HIERARCHY
+######################################################################
+
+kb:DurableCategories    kb:subordinates kb:IndependentElements .
+kb:CrossCategorical     kb:subordinates kb:DurableCategories .
+kb:Systemic             kb:subordinates kb:CrossCategorical .
+kb:TransSystemic        kb:subordinates kb:Systemic .
+
+kb:RelationalVoice  kb:orthogonalTo kb:CrossCategorical , kb:Systemic .
+kb:SeparateVoice    kb:orthogonalTo kb:CrossCategorical , kb:Systemic .
+
+######################################################################
+#  EXPECTATION INDIVIDUALS (with required order)
+######################################################################
+
+# Family / couple
+kb:TrustworthyFamilyMember, kb:NonDefensiveCommunication
+        a kb:Expectation ; kb:requiresOrder kb:CrossCategorical , kb:Systemic .
+
+kb:LeadFamily, kb:SupportChildGrowth, kb:ManageFamilyBoundaries,
+kb:SetLimitsForChildren, kb:PsychIndependenceSpouse,
+kb:PostRomanticCloseness, kb:PreserveCoupleViaLimits,
+kb:SupportPartnerDev, kb:DirectFairCommunication,
+kb:PersonalHistoryAware
+        a kb:Expectation ; kb:requiresOrder kb:Systemic .
+
+# Work-life
+kb:OwnWork, kb:SelfInitiatingWorker, kb:VisionGuidedWorker,
+kb:SelfResponsibleWorker, kb:WorkRoleMastery,
+kb:SystemsPerspectiveWork
+        a kb:Expectation ; kb:requiresOrder kb:Systemic .
+
+# Therapy / professional
+kb:MaintainPublicPrivateBoundary, kb:FacilitateFourthOrderDevelopment,
+kb:SelfDirectedLearner
+        a kb:Expectation ; kb:requiresOrder kb:Systemic .
+
+# Conflict / leadership
+kb:CollaborativeConflictHandling  a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:TransformativeConflictHandling a kb:Expectation ; kb:requiresOrder kb:TransSystemic .
+kb:CollaborativeVisionConstruction a kb:Expectation ; kb:requiresOrder kb:TransSystemic .
+
+# Post-modern diversity
+kb:InclusiveCrossCulturalRespect   a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:CritiqueIdeologicalAbsolutism   a kb:Expectation ; kb:requiresOrder kb:TransSystemic .
+
+######################################################################
+#  HOLDING & BRIDGING ENVIRONMENTS
+######################################################################
+
+kb:TokenEconomyProgram, kb:MilieuTherapyUnit, kb:BoatworksTraining
+        a kb:HoldingEnvironment .
+
+kb:TokenEconomyProgram  kb:offersSupport "false"^^xsd:boolean ;
+                        kb:offersChallenge "false"^^xsd:boolean .
+
+kb:MilieuTherapyUnit    kb:offersSupport "false"^^xsd:boolean ;
+                        kb:offersChallenge "true"^^xsd:boolean .
+
+kb:BoatworksTraining    kb:offersSupport "true"^^xsd:boolean ;
+                        kb:offersChallenge "true"^^xsd:boolean ;
+                        kb:supportsTransitionTo kb:CrossCategorical .
+
+kb:PerrysReadingCourse, kb:DalozMentoring
+        a kb:BridgingEnvironment ;
+        kb:offersSupport  "true"^^xsd:boolean ;
+        kb:offersChallenge "true"^^xsd:boolean ;
+        kb:supportsTransitionTo kb:Systemic .
+
+kb:DiversityMovement    a kb:CommunityOfIdeology ;
+                        kb:offersSupport  "true"^^xsd:boolean ;
+                        kb:offersChallenge "true"^^xsd:boolean ;
+                        kb:supportsTransitionTo kb:Systemic .
+
+######################################################################
+#  PEOPLE & THEIR STATES / RELATIONS
+######################################################################
+
+# Curfew-vignette family
+kb:Matty            a kb:Adolescent ;    kb:operatesAtOrder kb:DurableCategories .
+kb:Peter, kb:Lynn   a kb:Parent , kb:IntimatePartner .
+kb:Peter            kb:expects kb:TrustworthyFamilyMember ;
+                    kb:operatesAtOrder kb:CrossCategorical .
+kb:Lynn             kb:expects kb:TrustworthyFamilyMember , kb:NonDefensiveCommunication ;
+                    kb:operatesAtOrder kb:Systemic .
+kb:Matty            kb:operatesAtOrder kb:DurableCategories .
+kb:Lynn kb:partnersWith kb:Peter .
+
+# Boatworks & peers
+kb:Roxanne, kb:Terry, kb:Richard  a kb:Adolescent ;
+                                  kb:operatesAtOrder kb:DurableCategories .
+
+# Chapter-3 family
+kb:Alice            a kb:Parent ; kb:operatesAtOrder kb:CrossCategorical .
+kb:Ann              a kb:Child .
+kb:Jenny            a kb:Child .
+
+# Dramatic & therapy couples
+kb:Nora             a kb:IntimatePartner ; kb:operatesAtOrder kb:Systemic .
+kb:Torvald          a kb:IntimatePartner ; kb:operatesAtOrder kb:CrossCategorical .
+kb:Nora kb:partnersWith kb:Torvald .
+
+kb:William          a kb:IntimatePartner ; kb:operatesAtOrder kb:CrossCategorical .
+kb:Betty            a kb:IntimatePartner .
+kb:William kb:partnersWith kb:Betty .
+
+# Workplace vignette
+kb:Carolyn          a kb:Person ; kb:operatesAtOrder kb:CrossCategorical ;
+                    kb:expects kb:SelfInitiatingWorker .
+kb:Alan, kb:Ted, kb:Harold  a kb:Person .
+kb:AndersonWright  a kb:Person ; kb:operatesAtOrder kb:Systemic ;
+                    kb:expects kb:OwnWork ,
+                               kb:SelfInitiatingWorker ,
+                               kb:VisionGuidedWorker .
+
+# Queens therapy case
+kb:Jamie, kb:Anita a kb:Person ; kb:operatesAtOrder kb:CrossCategorical .
+kb:Ann             a kb:Parent  ; kb:operatesAtOrder kb:CrossCategorical .
+kb:James           a kb:Parent  ; kb:operatesAtOrder kb:CrossCategorical .
+
+kb:QueensFamilyTherapy  a kb:Therapy .
+kb:FamilyTherapist      a kb:Therapist ; kb:operatesAtOrder kb:Systemic ;
+                        kb:expects kb:MaintainPublicPrivateBoundary ,
+                                   kb:FacilitateFourthOrderDevelopment .
+
+kb:Jamie, kb:Ann, kb:James, kb:Anita
+        kb:participatesIn kb:QueensFamilyTherapy ;
+        kb:treatedBy      kb:FamilyTherapist .
+
+# Adult education
+kb:Perry            a kb:Teacher ; kb:operatesAtOrder kb:Systemic ;
+                    kb:expects kb:SelfDirectedLearner .
+kb:Daloz            a kb:Teacher ; kb:operatesAtOrder kb:Systemic ;
+                    kb:expects kb:SelfDirectedLearner .
+kb:MarthaFindlay    a kb:Student ; kb:operatesAtOrder kb:CrossCategorical ;
+                    kb:mentoredBy kb:Daloz .
+
+# Conflict-handling marriages
+kb:MrAble, kb:MrsAble
+        a kb:IntimatePartner ; kb:operatesAtOrder kb:Systemic ;
+        kb:expects kb:CollaborativeConflictHandling .
+kb:MrAble kb:partnersWith kb:MrsAble .
+
+kb:MrBaker, kb:MrsBaker
+        a kb:IntimatePartner ; kb:operatesAtOrder kb:TransSystemic ;
+        kb:expects kb:TransformativeConflictHandling .
+kb:MrBaker kb:partnersWith kb:MrsBaker .
+
+######################################################################
+#  MISCELLANEOUS LINKS
+######################################################################
+
+# Voice orientation orthogonality already declared above.
+# Curriculum demand links already declared above.
+# Any person can later receive kb:hasVoiceOrientation / kb:hasPreference as needed.
