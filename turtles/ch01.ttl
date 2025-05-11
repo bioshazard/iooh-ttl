@@ -1,0 +1,52 @@
+# Generated from Chapter 1 
+@prefix kb:  <http://example.org/kegan#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+### Core classes
+kb:Person                    a owl:Class .
+kb:Adolescent                a owl:Class ; rdfs:subClassOf kb:Person .
+kb:Parent                    a owl:Class ; rdfs:subClassOf kb:Person .
+
+kb:OrderOfConsciousness      a owl:Class .
+kb:Expectation               a owl:Class .
+
+### Orders (principles) of consciousness
+kb:IndependentElements       a kb:OrderOfConsciousness .
+kb:DurableCategories         a kb:OrderOfConsciousness .
+kb:CrossCategorical          a kb:OrderOfConsciousness .
+
+### Structural relation between orders
+kb:subordinates              a owl:ObjectProperty ;
+                             rdfs:domain kb:OrderOfConsciousness ;
+                             rdfs:range  kb:OrderOfConsciousness .
+kb:DurableCategories         kb:subordinates kb:IndependentElements .
+kb:CrossCategorical          kb:subordinates kb:DurableCategories .
+
+### Expectation→order linkage
+kb:requiresOrder             a owl:ObjectProperty ;
+                             rdfs:domain kb:Expectation ;
+                             rdfs:range  kb:OrderOfConsciousness .
+
+### Individuals in vignette
+kb:Matty                     a kb:Adolescent .
+kb:Peter                     a kb:Parent .
+kb:Lynn                      a kb:Parent .
+
+### Concrete expectation instance (parents want trustworthiness)
+kb:TrustworthyFamilyMember   a kb:Expectation ;
+                             kb:requiresOrder kb:CrossCategorical .
+
+### Social relations in the scenario
+kb:expects                   a owl:ObjectProperty ;
+                             rdfs:domain kb:Person ;
+                             rdfs:range  kb:Expectation .
+kb:Peter  kb:expects kb:TrustworthyFamilyMember .
+kb:Lynn   kb:expects kb:TrustworthyFamilyMember .
+
+### Matty’s current meaning-making (inferred from text)
+kb:operatesAtOrder           a owl:ObjectProperty ;
+                             rdfs:domain kb:Person ;
+                             rdfs:range  kb:OrderOfConsciousness .
+kb:Matty kb:operatesAtOrder kb:DurableCategories .

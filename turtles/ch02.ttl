@@ -1,0 +1,44 @@
+# Additions from Chapter 2
+@prefix kb:  <http://example.org/kegan#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### New class
+kb:HoldingEnvironment      a owl:Class .
+
+### New object-property
+kb:supportsTransitionTo    a owl:ObjectProperty ;
+                           rdfs:domain kb:HoldingEnvironment ;
+                           rdfs:range  kb:OrderOfConsciousness .
+
+### Simple support / challenge flags (datatype for terseness)
+kb:offersSupport           a owl:DatatypeProperty ;
+                           rdfs:domain kb:HoldingEnvironment ;
+                           rdfs:range  xsd:boolean .
+kb:offersChallenge         a owl:DatatypeProperty ;
+                           rdfs:domain kb:HoldingEnvironment ;
+                           rdfs:range  xsd:boolean .
+
+### New individuals (case adolescents)
+kb:Roxanne                 a kb:Adolescent ;
+                           kb:operatesAtOrder kb:DurableCategories .
+kb:Terry                   a kb:Adolescent ;
+                           kb:operatesAtOrder kb:DurableCategories .
+kb:Richard                 a kb:Adolescent ;
+                           kb:operatesAtOrder kb:DurableCategories .
+
+### Program contexts (contrasting holding environments)
+kb:TokenEconomyProgram     a kb:HoldingEnvironment ;
+                           kb:offersSupport  "false"^^xsd:boolean ;
+                           kb:offersChallenge "false"^^xsd:boolean .
+
+kb:MilieuTherapyUnit       a kb:HoldingEnvironment ;
+                           kb:offersSupport  "false"^^xsd:boolean ;
+                           kb:offersChallenge "true"^^xsd:boolean .
+
+kb:BoatworksTraining       a kb:HoldingEnvironment ;
+                           kb:offersSupport  "true"^^xsd:boolean ;
+                           kb:offersChallenge "true"^^xsd:boolean ;
+                           kb:supportsTransitionTo kb:CrossCategorical .

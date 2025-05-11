@@ -1,0 +1,39 @@
+# Additions from Chapter 4
+@prefix kb:  <http://example.org/kegan#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+### Partner role
+kb:IntimatePartner          a owl:Class ;
+                            rdfs:subClassOf kb:Person .
+
+### Couple relation (bidirectional)
+kb:partnersWith             a owl:ObjectProperty , owl:SymmetricProperty ;
+                            rdfs:domain kb:Person ;
+                            rdfs:range  kb:Person .
+
+### Fourth-order demand on couples
+kb:NonDefensiveCommunication  a kb:Expectation ;
+                              kb:requiresOrder kb:Systemic .
+
+### Ibsen couple
+kb:Nora                      a kb:IntimatePartner ;
+                             kb:operatesAtOrder kb:Systemic .
+kb:Torvald                   a kb:IntimatePartner ;
+                             kb:operatesAtOrder kb:CrossCategorical .
+kb:Nora    kb:partnersWith   kb:Torvald .
+
+### Contemporary therapy couple
+kb:William                   a kb:IntimatePartner ;
+                             kb:operatesAtOrder kb:CrossCategorical .
+kb:Betty                     a kb:IntimatePartner .
+kb:William kb:partnersWith   kb:Betty .
+
+### Ongoing case couple (updates to existing individuals)
+kb:Lynn                      a kb:IntimatePartner ;
+                             kb:operatesAtOrder kb:Systemic ;
+                             kb:expects          kb:NonDefensiveCommunication .
+kb:Peter                     a kb:IntimatePartner ;
+                             kb:operatesAtOrder kb:CrossCategorical .
+kb:Lynn   kb:partnersWith    kb:Peter .

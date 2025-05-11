@@ -1,0 +1,29 @@
+# Additions from Chapter 3
+@prefix kb:  <http://example.org/kegan#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+### Fourth-order mind
+kb:Systemic                 a kb:OrderOfConsciousness .
+kb:Systemic                 kb:subordinates kb:CrossCategorical .
+
+### Additional role class
+kb:Child                    a owl:Class ; rdfs:subClassOf kb:Person .
+
+### Vignette actors
+kb:Alice                    a kb:Parent ; kb:operatesAtOrder kb:CrossCategorical .
+kb:Ann                      a kb:Child  .
+kb:Jenny                    a kb:Child  .
+
+### Adult-family expectations (all demand fourth order)
+kb:LeadFamily               a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:SupportChildGrowth       a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:ManageFamilyBoundaries   a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:SetLimitsForChildren     a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:PsychIndependenceSpouse  a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:PostRomanticCloseness    a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:PreserveCoupleViaLimits  a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:SupportPartnerDev        a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:DirectFairCommunication  a kb:Expectation ; kb:requiresOrder kb:Systemic .
+kb:PersonalHistoryAware     a kb:Expectation ; kb:requiresOrder kb:Systemic .
